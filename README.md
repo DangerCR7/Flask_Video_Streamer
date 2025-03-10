@@ -35,7 +35,7 @@ This repository contains a Video Streaming API built using Flask. It allows user
    ```bash
     pip install -r requirements.txt
 
-** Usage
+## Usage
 1. **Run Application**:
    ```bash
      python app.py
