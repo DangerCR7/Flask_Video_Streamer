@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Streaming App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: black;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #00ffcc;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 20px rgba(0, 255, 204, 0.3);
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #00ffcc, #009688);
+            border-image-slice: 1;
+        }
+
+        #video-stream {
+            width: 100%;
+            border-radius: 10px;
+            border: 2px solid #00ffcc;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            background: #00ffcc;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            color: black;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #009688;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .status span {
+            color: #ff4444;
+        }
+
+        .status.recording span {
+            color: #00ffcc;
+        }
+
+        .login-btn {
+            margin-top: 20px;
+            background: #4285F4;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .signup-btn {
+            margin-top: 20px;
+            background: #4CAF50;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .login-signup-container {
+            margin-top: 50px;
+            background: linear-gradient(45deg, #00ffcc, #009688);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 20px rgba(0, 255, 204, 0.5);
+        }
+
+        .login-signup-container h2 {
+            color: white;
+        }
+
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Live Streaming App</h1>
+
+    <div class="container">
+        <img id="video-stream" src="{{ url_for('video') }}" alt="Live Stream">
+        <div class="status" id="stream-status">Status: <span>Stopped</span></div>
+        <div class="controls">
+            <button onclick="startStream()">Start</button>
+            <button onclick="stopStream()">Stop</button>
+            <button onclick="startRecording()">Start Recording</button>
+            <button onclick="stopRecording()">Stop Recording</button>
+            <button onclick="captureImage()">Capture</button>
+        </div>
+    </div>
+
+    <div class="login-signup-container">
+        <h2>Login or Sign Up</h2>
+        <button class="login-btn" onclick="googleLogin()">Login with Google</button>
+        <button class="login-btn" onclick="microsoftLogin()">Login with Microsoft</button>
+        <button class="signup-btn" onclick="showSignup()">Sign Up</button>
+    </div>
+
+    <!-- Login/Signup Modal -->
+    <div class="login-signup-modal" id="login-modal" style="display:none;">
+        <div style="background: #fff; padding: 20px; border-radius: 10px; width: 400px; margin: auto;">
+            <h3>Sign In</h3>
+            <input type="text" placeholder="Email" id="email"><br>
+            <input type="password" placeholder="Password" id="password"><br>
+            <button onclick="loginUser()">Login</button>
+        </div>
+    </div>
+
+    <script>
+        function startStream() {
+            $.post('/start', function(response) {
+                $('#stream-status span').text("Streaming").css("color", "#00ffcc");
+            });
+        }
+
+        function stopStream() {
+            $.post('/stop', function(response) {
+                $('#stream-status span').text("Stopped").css("color", "#ff4444");
+            });
+        }
+
+        function startRecording() {
+            $.post('/start_recording', function(response) {
+                $('#stream-status span').text("Recording").css("color", "#00ffcc");
+                alert("Recording has started!");
+            });
+        }
+
+        function stopRecording() {
+            $.post('/stop_recording', function(response) {
+                $('#stream-status span').text("Streaming").css("color", "#00ffcc");
+                alert("Recording has stopped!");
+            });
+        }
+
+        function captureImage() {
+            let videoElement = document.getElementById('video-stream');
+            let canvas = document.getElementById('canvas');
+            let snapshot = document.getElementById('snapshot');
+            let downloadLink = document.getElementById('download-link');
+
+            canvas.width = videoElement.width;
+            canvas.height = videoElement.height;
+            let context = canvas.getContext('2d');
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            let imageData = canvas.toDataURL('image/png');
+            snapshot.src = imageData;
+            snapshot.style.display = 'block';
+
+            downloadLink.href = imageData;
+            downloadLink.style.display = 'inline-block';
+            downloadLink.innerText = "Download Screenshot";
+        }
+
+        // Google login placeholder
+        function googleLogin() {
+            alert("Google Login functionality will be integrated!");
+        }
+
+        // Microsoft login placeholder
+        function microsoftLogin() {
+            alert("Microsoft Login functionality will be integrated!");
+        }
+
+        // Show signup form
+        function showSignup() {
+            document.getElementById('login-modal').style.display = 'block';
+        }
+
+        // Simulate user login
+        function loginUser() {
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            if (email && password) {
+                alert("Login successful!");
+                document.getElementById('login-modal').style.display = 'none';
+            } else {
+                alert("Please enter valid credentials!");
+            }
+        }
+    </script>
+
+</body>
+</html>
