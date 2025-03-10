@@ -11,16 +11,20 @@ We welcome contributions to the Flask Video Streamer project. By contributing, y
    git clone https://github.com/your-username/Flask_Video_Streamer.git
    cd Flask_Video_Streamer
 3. **Create a branch**: Create a new brancj for your work to avoid conflicts with the main codebase.
-
-  ```bash
+   ```bash
    git checkout -b feature/your-feature-name
 
 
 4.** Make your changes**: Make your changes addtions, or improvements to the codebase.
-5. ** Commit your changes**:
-  ```bash
-  git add .
-  git commit -m 'Add some feature'
+5.** Commit your changes**:
+   ```bash
+        git add .
+        git commit -m 'Add some feature'
+6. Push to your branch:
+   ```bash
+   git push origin feature/your-feature-name
 
+
+7.**Create a Pull Request**: Go to the original repository, click on the "Pull Requests" tab, and create a new pull request from your forked repository.
 
 
